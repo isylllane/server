@@ -12,7 +12,7 @@ const errorHandler = require("./middleware/ErrorHandingMiddleware");
 
 const app = express();
 app.use(cors());
-app.use("/img", express.static(path.join(__dirname, "static")));
+app.use("/api/img", express.static(path.join(__dirname, "static")));
 app.use(express.json());
 app.use(fileUpload({}));
 
