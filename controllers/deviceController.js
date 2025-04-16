@@ -9,8 +9,15 @@ class DeviceController {
         try {
             let {name, price, brandId, typeId, info} = req.body
             const {img} = req.files
-            let fileName = uuid.v4() + ".gif" // Временное изменение
-            img.mv(path.resolve(__dirname, '..', 'static', fileName))
+
+            // **1. Получаем расширение файла**
+            const fileExtension = path.extname(img.name).toLowerCase();  // Получаем расширение файла из имени
+            if (fileExtension !== '.gif') { // **2. Проверяем, что это GIF**
+                return next(ApiError.badRequest('Допустимы только GIF-файлы'));
+            }
+
+            let fileName = uuid.v4() + fileExtension; // **3. Используем расширение GIF**
+            img.mv(path.resolve(__dirname, '..', 'static', fileName));
             const device = await Device.create({name, price, brandId, typeId, img: fileName});
 
             if (info) {
